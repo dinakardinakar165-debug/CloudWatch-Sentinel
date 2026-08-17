@@ -1,0 +1,34 @@
+services:
+  # Render Web Service (FastAPI Backend)
+  - type: web
+    name: cloudwatch-sentinel-api
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DEMO_MODE
+        value: "true"
+      - key: DATABASE_PATH
+        value: "sentinel.db"
+      - key: FRONTEND_URL
+        value: https://cloudwatch-sentinel-ui.onrender.com
+
+  # Render Static Site (React + Vite Frontend)
+  - type: static
+    name: cloudwatch-sentinel-ui
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: cloudwatch-sentinel-api
+          property: url

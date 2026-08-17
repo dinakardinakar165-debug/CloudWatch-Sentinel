@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloudwatch-sentinel-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - JWT_SECRET=sentinel-super-secret-key-render-2026
+      - DATABASE_PATH=sentinel.db
+      - FRONTEND_URL=*
+      - DEMO_MODE=true
+    restart: unless-stopped
