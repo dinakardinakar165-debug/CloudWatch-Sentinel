@@ -19,9 +19,9 @@ services:
         value: https://cloudwatch-sentinel-ui.onrender.com
 
   # Render Static Site (React + Vite Frontend)
-  - type: static
+  - type: web
     name: cloudwatch-sentinel-ui
-    region: oregon
+    runtime: static
     plan: free
     rootDir: frontend
     buildCommand: npm install && npm run build
