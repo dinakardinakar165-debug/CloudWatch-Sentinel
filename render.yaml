@@ -16,7 +16,10 @@ services:
       - key: DATABASE_PATH
         value: "sentinel.db"
       - key: FRONTEND_URL
-        value: https://cloudwatch-sentinel-ui.onrender.com
+        fromService:
+          type: web
+          name: cloudwatch-sentinel-ui
+          envVarKey: RENDER_EXTERNAL_URL
 
   # Render Static Site (React + Vite Frontend)
   - type: web
@@ -31,4 +34,4 @@ services:
         fromService:
           type: web
           name: cloudwatch-sentinel-api
-          property: url
+          envVarKey: RENDER_EXTERNAL_URL
