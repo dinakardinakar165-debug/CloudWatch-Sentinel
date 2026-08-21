@@ -25,7 +25,6 @@ services:
   - type: web
     name: cloudwatch-sentinel-ui
     runtime: static
-    region: oregon
     rootDir: frontend
     buildCommand: npm install && npm run build
     staticPublishPath: dist
