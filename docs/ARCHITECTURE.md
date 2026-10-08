@@ -1,10 +1,10 @@
 # System Architecture & Design – CloudWatch Sentinel
 
-CloudWatch Sentinel is a production-grade, cloud-independent cost monitoring and statistical anomaly detection application deployed on the **Render Cloud Platform**.
+CloudWatch Sentinel is a cloud-independent, enterprise-grade cost monitoring, statistical anomaly detection, and telemetry platform deployed on the **Render Cloud Platform**.
 
 ---
 
-## High-Level System Architecture
+## 🏛 System Architecture Overview
 
 ```mermaid
 flowchart TD
@@ -12,62 +12,45 @@ flowchart TD
   Frontend -->|JWT Authorization Header| Backend[Render Web Service: FastAPI Backend]
   
   subgraph Render Cloud Platform
-    Backend --> DB[(SQLite Database: sentinel.db)]
-    Backend --> AnomalyEngine[Z-Score Anomaly Detector Engine]
-    Backend --> NotifEngine[In-App & Logging Notification Service]
-    Backend --> DemoProvider[Demo Cloud Cost Data Provider]
+    Backend --> DB[(SQLite Database: sentinel.db WAL Mode)]
+    Backend --> AnomalyEngine[Z-Score Outlier Calculator]
+    Backend --> NotifEngine[In-App & Logger Notification Service]
+    Backend --> DemoProvider[Synthetic Telemetry Cost Provider]
   end
 ```
 
 ---
 
-## Core Components
+## 🧩 Subsystem Breakdown
 
-### 1. Render Static Site (Frontend UI)
-- Hosted on Render Static Sites with custom domain / public HTTPS URL (`https://cloudwatch-sentinel-ui.onrender.com`).
-- Single Page Application built using React 18, TypeScript 5, Vite 5, Recharts 2, and Vanilla CSS.
-- Communicates with the backend using the environment variable `VITE_API_URL`.
+### 1. Frontend Web Dashboard (`frontend/`)
+- Built with React 18, TypeScript 5, Vite 5, Recharts 2, and a dark SaaS design system.
+- Provides 7 dedicated views: Overview Dashboard, Cost Analytics, Cloud Resources, Anomalies Engine, Alerts & Notifications, System Health, and Settings.
+- Interacts with backend via `import.meta.env.VITE_API_URL` environment variables.
 
-### 2. Render Web Service (FastAPI Backend API)
-- Hosted on Render Web Services listening on `0.0.0.0:${PORT}`.
-- Provides RESTful routes for authentication (`/register`, `/login`, `/confirm-registration`), cost metrics (`/cost-history`), dashboard metrics (`/dashboard`, `/summary`), anomalies (`/anomalies`), notifications (`/alerts`), demo update generation (`/demo/generate-cost`), and health check (`/health`).
-- Exposes CORS headers dynamically configured via `FRONTEND_URL`.
+### 2. FastAPI Backend API Service (`backend/`)
+- Powered by FastAPI and Uvicorn ASGI server listening on `0.0.0.0:${PORT}`.
+- Exposes RESTful endpoints for authentication, cost telemetry, anomaly calculations, health monitoring, and demo simulations.
+- Enforces dynamic CORS rules matching `FRONTEND_URL`.
 
 ### 3. SQLite Database Repository (`backend/shared/repository.py`)
-- Auto-initializes schema on startup with WAL journal mode (`PRAGMA journal_mode=WAL`) and 60-second connection timeouts.
+- Auto-initializes schema on startup with Write-Ahead Logging (`PRAGMA journal_mode=WAL`) and 60-second connection timeouts.
 - Tables:
-  - `users`: User profiles and hashed passwords.
-  - `accounts`: Connected account details (`userId`, `accountName`, `roleArn`, `externalId`).
-  - `cost_history`: Service-level daily cloud spend.
-  - `anomalies`: Detected cost spikes (`baseline`, `zScore`, `severity`).
-  - `notifications`: Alert notifications.
+  - `users`: User profiles and hashed credentials.
+  - `accounts`: Connected cloud account metadata.
+  - `cost_history`: Service-level daily cloud expenditure.
+  - `anomalies`: Flagged cost spikes with calculated Z-scores.
+  - `notifications`: Alert notification items.
 
-### 4. Statistical Anomaly Detector Engine (`backend/anomaly/detector.py`)
-- Evaluates per-service daily spend using a rolling population Z-score calculation:
+### 4. Z-Score Statistical Anomaly Engine (`backend/anomaly/detector.py`)
+- Evaluates per-service daily spend using population Z-score standard deviation calculations:
   $$Z = \frac{X - \mu}{\sigma}$$
-  Where $X$ is current daily spend, $\mu$ is baseline mean, and $\sigma$ is baseline standard deviation.
-- Severity levels:
-  - **Medium**: $2.0 \le Z < 3.0$
-  - **High**: $3.0 \le Z < 4.0$
-  - **Critical**: $Z \ge 4.0$ (or standard deviation is 0 with a spike)
+- Severity rules:
+  - `CRITICAL`: $Z \ge 4.0$
+  - `HIGH`: $3.0 \le Z < 4.0$
+  - `MEDIUM`: $2.0 \le Z < 3.0$
+  - `LOW`: $Z < 2.0$
 
-### 5. Demo Cloud Cost Data Provider (`backend/cost/service.py`)
-- Generates 30+ days of historical daily cloud spending across:
-  - Compute Services
-  - Storage Services
-  - Database Services
-  - Network & CDN
-  - API & Gateways
-  - Other Cloud Services
-- Injects realistic cost spikes (e.g. Compute Services jumping from $50 to $185.40) to demonstrate automated anomaly detection.
-
----
-
-## Original AWS Architecture Reference (Retained IaC)
-
-The repository retains full Terraform configuration (`terraform/main.tf`) as an optional future deployment architecture for AWS:
-- AWS API Gateway HTTP API + Cognito User Pool
-- AWS Lambda functions (`sentinel-api`, `sentinel-collector`)
-- 5 DynamoDB On-Demand Tables
-- EventBridge 6-hour scheduler
-- Amazon SNS Email Notifications
+### 5. Ephemeral Filesystem Cold-Start Resilience
+- Render Free Tier container filesystems reset upon redeployment or cold restarts.
+- FastAPI's `@asynccontextmanager` `lifespan` handler automatically initializes `sentinel.db` and seeds baseline 30-day cloud cost metrics and Z-score anomalies if empty, ensuring instant application availability.

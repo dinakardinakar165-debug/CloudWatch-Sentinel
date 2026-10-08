@@ -1,27 +1,27 @@
-# Interview & Presentation Guide – CloudWatch Sentinel
+# Interview & Viva Q&A Guide – CloudWatch Sentinel
 
-This guide provides high-yield questions, answers, and architectural explanations for college project presentations and technical interviews.
+High-yield questions and answers for academic project evaluation and technical interviews.
 
 ---
 
-## Technical & Cloud Architecture Q&A
+## ❓ Frequently Asked Viva Questions
 
-### 1. Why qualifies this project as a Cloud Application?
-**Answer**: CloudWatch Sentinel is architected and deployed on a real public cloud platform (**Render Cloud Platform**). It features a multi-tier cloud distribution model (Render Static Site for React frontend, Render Web Service for FastAPI REST API), containerization via Docker, environment-based configuration, RESTful HTTPS communication, CORS access control, statistical anomaly detection, and automated CI/CD pipeline integration.
+### Q1: Why qualifies this project as a Cloud Application?
+**Answer**: CloudWatch Sentinel is architected for public cloud deployment on the **Render Cloud Platform**. It employs a decoupled multi-tier cloud distribution model (Render Static Site for React frontend, Render Web Service for FastAPI REST API), containerization via Docker, environment variable configuration, RESTful HTTPS communications, dynamic CORS security, statistical Z-score anomaly detection, and automated Git deployment integration.
 
-### 2. How does the Z-score anomaly detection engine work?
-**Answer**: The anomaly engine calculates a population Z-score for each cloud service spend observation:
+### Q2: How does the Z-score anomaly detection engine work?
+**Answer**: The engine computes a population Z-score for daily spend observations:
 $$Z = \frac{X - \mu}{\sigma}$$
-Where $X$ is current spend, $\mu$ is rolling mean of baseline spend, and $\sigma$ is standard deviation. When $Z \ge 2.0$, the engine flags a cost anomaly categorized by severity:
-- **Medium**: $2.0 \le Z < 3.0$
-- **High**: $3.0 \le Z < 4.0$
-- **Critical**: $Z \ge 4.0$
+Where $X$ is current daily spend, $\mu$ is rolling baseline mean, and $\sigma$ is standard deviation. Observations with $Z \ge 2.0$ trigger anomalies classified into `CRITICAL` ($Z \ge 4.0$), `HIGH` ($Z \ge 3.0$), and `MEDIUM` ($Z \ge 2.0$).
 
-### 3. Why use Render Free Tier over AWS for this college demonstration?
-**Answer**: Render Free Tier provides full cloud functionality (public HTTPS URLs, Docker Web Service container execution, Static Site hosting, environment variable management, and automated Git deployments) without requiring credit card payments or risking unexpected cloud billing charges.
+### Q3: Who are the team members and what were their roles?
+**Answer**:
+- **Dinakar S (24BCS405)**: Lead Software Architect & Full Stack Engineer
+- **Kabileshwara Y (24BCS411)**: Senior Cloud Architect & Backend Engineer
+- **Pranesh Sachin M (24BCS415)**: Senior DevOps & Security Engineer
+- **Santhosh TMA (24BCS247)**: Data Analytics & QA Engineer
+- **Nikhil R (24BCS190)**: UI/UX & Frontend Engineer
+- **Institution**: Kumaraguru College of Technology (KCT)
 
-### 4. How is data persisted in the cloud-independent architecture?
-**Answer**: Data is persisted using an auto-initialized SQLite database repository (`sentinel.db`) with Write-Ahead Logging (`PRAGMA journal_mode=WAL`) and 60-second connection timeouts. It provides structured storage for `users`, `accounts`, `cost_history`, `anomalies`, and `notifications`.
-
-### 5. How are security and secrets managed?
-**Answer**: Authentication relies on HMAC-SHA256 signed JWT tokens. Passwords are hashed using SHA-256 with static salt before database storage. Application secrets (`JWT_SECRET`, `VITE_API_URL`, `FRONTEND_URL`) are injected via environment variables and excluded from Git commits via `.gitignore`.
+### Q4: How is data transparency handled?
+**Answer**: The UI displays prominent badges (`SIMULATED COST DATA`) and settings disclosures explaining that telemetry data is synthetic for college demonstration purposes. The data collector module is decoupled, enabling seamless replacement with AWS Cost Explorer API (`ce:GetCostAndUsage`) in production.
