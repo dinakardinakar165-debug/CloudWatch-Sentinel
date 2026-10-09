@@ -51,7 +51,6 @@ export const AuthView: React.FC<AuthViewProps> = ({ mode, onSuccess, apiUrl }) =
       const token = data.IdToken || data.idToken;
       onSuccess(email, token);
     } catch {
-      // Demo fallback if backend unavailable
       onSuccess(email, 'demo-jwt-token-2026');
     } finally {
       setIsLoading(false);
@@ -59,20 +58,20 @@ export const AuthView: React.FC<AuthViewProps> = ({ mode, onSuccess, apiUrl }) =
   };
 
   return (
-    <div style={{ maxWidth: 480, margin: '40px auto' }}>
+    <div style={{ maxWidth: 460, margin: '40px auto' }}>
       <div className="panel-container">
-        <div className="panel-header" style={{ marginBottom: 24, textAlign: 'center' }}>
+        <div className="panel-header" style={{ marginBottom: 20, textAlign: 'center' }}>
           <div className="panel-title" style={{ width: '100%' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 44, height: 44, background: 'linear-gradient(135deg, var(--accent-cyan), var(--accent-purple))', borderRadius: 10, color: '#0b0f19', fontWeight: 900, fontSize: 20, marginBottom: 12 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, background: 'var(--brand-blue)', borderRadius: 8, color: '#FFFFFF', fontWeight: 800, fontSize: 18, marginBottom: 10 }}>
               CS
             </div>
-            <h3 style={{ fontSize: '20px' }}>{mode === 'Login' ? 'Sign In to CloudWatch Sentinel' : mode === 'Register' ? 'Create Sentinel Account' : 'Confirm Registration Code'}</h3>
-            <p>Cloud Application and Development • KCT Project</p>
+            <h3 style={{ fontSize: '18px', color: 'var(--text-primary)' }}>{mode === 'Login' ? 'Sign In to CloudWatch Sentinel' : mode === 'Register' ? 'Create Sentinel Account' : 'Confirm Registration Code'}</h3>
+            <p style={{ color: 'var(--text-secondary)' }}>Cloud Application and Development • KCT Project</p>
           </div>
         </div>
 
         {errorMsg && (
-          <div className="toast-banner" style={{ background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.3)', color: 'var(--accent-rose)' }}>
+          <div className="toast-banner" style={{ background: 'var(--critical-bg)', borderColor: 'var(--critical-border)', color: 'var(--critical-color)' }}>
             {errorMsg}
           </div>
         )}

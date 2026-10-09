@@ -22,20 +22,20 @@ export const SettingsView: React.FC = () => {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
           <div>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>PROJECT NAME</span>
-            <strong style={{ fontSize: '15px', color: 'var(--accent-cyan)' }}>CloudWatch Sentinel</strong>
+            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>PROJECT NAME</span>
+            <strong style={{ fontSize: '15px', color: 'var(--brand-blue)' }}>CloudWatch Sentinel</strong>
           </div>
           <div>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>SUBJECT</span>
+            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>SUBJECT</span>
             <strong style={{ fontSize: '15px', color: 'var(--text-primary)' }}>Cloud Application and Development</strong>
           </div>
           <div>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>INSTITUTION</span>
-            <strong style={{ fontSize: '15px', color: 'var(--accent-purple)' }}>Kumaraguru College of Technology (KCT)</strong>
+            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>INSTITUTION</span>
+            <strong style={{ fontSize: '15px', color: 'var(--info-color)' }}>Kumaraguru College of Technology (KCT)</strong>
           </div>
           <div>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>CLOUD HOST</span>
-            <strong style={{ fontSize: '15px', color: 'var(--accent-emerald)' }}>Render Free Cloud Platform</strong>
+            <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>CLOUD HOST</span>
+            <strong style={{ fontSize: '15px', color: 'var(--success-color)' }}>Render Free Cloud Platform</strong>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export const SettingsView: React.FC = () => {
               {teamMembers.map((m, idx) => (
                 <tr key={idx}>
                   <td><strong>{m.name}</strong></td>
-                  <td><code style={{ color: 'var(--accent-cyan)', fontFamily: 'var(--font-mono)' }}>{m.rollNo}</code></td>
+                  <td><code style={{ color: 'var(--brand-blue)', fontFamily: 'var(--font-mono)' }}>{m.rollNo}</code></td>
                   <td>{m.role}</td>
                 </tr>
               ))}
@@ -80,14 +80,13 @@ export const SettingsView: React.FC = () => {
               <p>Technical specifications of the Sentinel platform</p>
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '13px', color: 'var(--text-secondary)' }}>
             <p><strong>Cloud Platform Target:</strong> Render Free Tier (Render Web Service + Render Static Site)</p>
-            <p><strong>Frontend Stack:</strong> React 18, TypeScript 5, Vite 5, Recharts 2, Dark SaaS CSS</p>
+            <p><strong>Frontend Stack:</strong> React 18, TypeScript 5, Vite 5, Recharts 2, Light Enterprise Design System</p>
             <p><strong>Backend API:</strong> Python 3.11+, FastAPI, Uvicorn ASGI Server</p>
             <p><strong>Database Engine:</strong> Auto-Initialized SQLite Repository (`sentinel.db` with WAL Journal Mode)</p>
             <p><strong>Authentication Protocol:</strong> HMAC-SHA256 JWT Token Verification with Salted Password Hashes</p>
             <p><strong>Anomaly Detection Engine:</strong> Population Z-Score Outlier Engine [ Z = (X - μ) / σ ]</p>
-
           </div>
         </div>
 
@@ -98,8 +97,8 @@ export const SettingsView: React.FC = () => {
               <p>Transparency regarding cloud metrics provider</p>
             </div>
           </div>
-          <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-            <div className="toast-banner" style={{ background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.3)', color: 'var(--accent-amber)', marginBottom: 12 }}>
+          <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            <div className="toast-banner" style={{ background: 'var(--warning-bg)', borderColor: 'var(--warning-border)', color: 'var(--warning-color)', marginBottom: 10 }}>
               <span>
                 <strong>SIMULATED COST PROVIDER:</strong> The current deployment uses deterministic synthetic cloud cost data across 6 service categories for college demonstration purposes.
               </span>

@@ -29,25 +29,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
       ]
     },
     {
-      title: 'MONITORING',
+      title: 'ANALYTICS',
       items: [
         { id: 'Cost Analytics', label: 'Cost Analytics', icon: '📈' },
         { id: 'Anomalies', label: 'Anomalies Engine', icon: '⚡' },
-        { id: 'Alerts & Notifications', label: 'Alerts & Notifications', icon: '🔔', badge: alertCount > 0 ? alertCount : undefined },
-        { id: 'Cloud Resources', label: 'Cloud Resources', icon: '☁️' }
+        { id: 'Alerts & Notifications', label: 'Alerts & Notifications', icon: '🔔', badge: alertCount > 0 ? alertCount : undefined }
       ]
     },
     {
-      title: 'MANAGEMENT',
+      title: 'INFRASTRUCTURE',
       items: [
-        { id: 'Demo Cloud Account', label: 'Accounts & Roles', icon: '🔑' },
-        { id: 'Settings', label: 'Settings & Team', icon: '⚙️' }
+        { id: 'Cloud Resources', label: 'Cloud Resources', icon: '☁️' },
+        { id: 'Cloud Platform & Deployment', label: 'Cloud Platform (Render)', icon: '🚀' }
       ]
     },
     {
       title: 'SYSTEM',
       items: [
-        { id: 'System Health', label: 'System Health', icon: '🟢' }
+        { id: 'System Health', label: 'System Health', icon: '🟢' },
+        { id: 'Settings', label: 'Settings & Team', icon: '⚙️' }
+      ]
+    },
+    {
+      title: 'MANAGEMENT',
+      items: [
+        { id: 'Demo Cloud Account', label: 'Accounts & Roles', icon: '🔑' }
       ]
     }
   ];
@@ -109,7 +115,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ) : (
           <button
             className="btn-signout"
-            style={{ color: 'var(--accent-cyan)', borderColor: 'rgba(56,189,248,0.3)', background: 'rgba(56,189,248,0.1)' }}
+            style={{ color: '#60A5FA', borderColor: '#374151', background: '#1F2937' }}
             onClick={() => onSelectTab('Login')}
           >
             Sign In / Register

@@ -70,7 +70,7 @@ export const CloudResourcesView: React.FC<CloudResourcesViewProps> = ({ costs })
 
   return (
     <div className="resources-container">
-      <div className="toast-banner" style={{ background: 'rgba(251,191,36,0.1)', borderColor: 'rgba(251,191,36,0.3)', color: 'var(--accent-amber)' }}>
+      <div className="toast-banner" style={{ background: 'var(--warning-bg)', borderColor: 'var(--warning-border)', color: 'var(--warning-color)' }}>
         <span>
           <strong>DEMO CLOUD ENVIRONMENT:</strong> Resource categories represent synthetic telemetry models for demonstration. The system architecture supports connecting real cloud provider billing APIs.
         </span>
@@ -85,7 +85,7 @@ export const CloudResourcesView: React.FC<CloudResourcesViewProps> = ({ costs })
             </div>
             <div className="metric-value">${cat.cost.toFixed(2)}</div>
             <div className="metric-subtext">
-              <span>{cat.count} Active Resource Pool Items</span>
+              <span>{cat.count} Active Resource Items</span>
             </div>
           </div>
         ))}
@@ -116,14 +116,14 @@ export const CloudResourcesView: React.FC<CloudResourcesViewProps> = ({ costs })
                   <td><strong>{cat.name}</strong></td>
                   <td>{cat.subtitle}</td>
                   <td>{cat.count} Resources</td>
-                  <td style={{ fontWeight: 700, color: 'var(--accent-cyan)' }}>${cat.cost.toFixed(2)}</td>
+                  <td style={{ fontWeight: 700, color: 'var(--brand-blue)' }}>${cat.cost.toFixed(2)}</td>
                   <td>
                     <span
                       className="status-badge-pill"
                       style={{
-                        background: cat.status === 'Spike Observed' ? 'rgba(248,113,113,0.12)' : 'rgba(52,211,153,0.12)',
-                        borderColor: cat.status === 'Spike Observed' ? 'rgba(248,113,113,0.3)' : 'rgba(52,211,153,0.3)',
-                        color: cat.status === 'Spike Observed' ? 'var(--accent-rose)' : 'var(--accent-emerald)'
+                        background: cat.status === 'Spike Observed' ? 'var(--critical-bg)' : 'var(--success-bg)',
+                        borderColor: cat.status === 'Spike Observed' ? 'var(--critical-border)' : 'var(--success-border)',
+                        color: cat.status === 'Spike Observed' ? 'var(--critical-color)' : 'var(--success-color)'
                       }}
                     >
                       ● {cat.status}

@@ -48,7 +48,7 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
             <span className="metric-card-title">High Anomalies</span>
             <span className="metric-icon">⚠️</span>
           </div>
-          <div className="metric-value" style={{ color: 'var(--accent-amber)' }}>{highCount}</div>
+          <div className="metric-value" style={{ color: 'var(--warning-color)' }}>{highCount}</div>
           <div className="metric-subtext">
             <span>Statistical Z-Score ≥ 3.0 Deviation</span>
           </div>
@@ -59,7 +59,7 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
             <span className="metric-card-title">Medium Anomalies</span>
             <span className="metric-icon">⚡</span>
           </div>
-          <div className="metric-value" style={{ color: 'var(--accent-purple)' }}>{mediumCount}</div>
+          <div className="metric-value" style={{ color: 'var(--brand-blue)' }}>{mediumCount}</div>
           <div className="metric-subtext">
             <span>Statistical Z-Score ≥ 2.0 Deviation</span>
           </div>
@@ -70,7 +70,7 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
             <span className="metric-card-title">Low / Baseline</span>
             <span className="metric-icon">ℹ️</span>
           </div>
-          <div className="metric-value" style={{ color: 'var(--accent-emerald)' }}>{lowCount}</div>
+          <div className="metric-value" style={{ color: 'var(--success-color)' }}>{lowCount}</div>
           <div className="metric-subtext">
             <span>Minor spending fluctuations</span>
           </div>
@@ -80,7 +80,7 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
       {/* Math Explanation Panel */}
       <div className="math-explainer-card">
         <h3 style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
-          🧠 How Statistical Z-Score Anomaly Detection Works
+          🧠 Statistical Population Z-Score Anomaly Detection Formula
         </h3>
         <p style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
           The Sentinel engine calculates a population Z-score for daily cloud spending observations to detect cost spikes:
@@ -90,8 +90,8 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
           Z = (X - μ) / σ
         </div>
 
-        <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-          Where <strong>X</strong> is the recorded daily spend, <strong>μ (mu)</strong> is the rolling baseline average spend, and <strong>σ (sigma)</strong> is the population standard deviation across historical observations.
+        <p style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+          Where <strong>X</strong> is the recorded daily spend amount ($ USD), <strong>μ (mu)</strong> is the rolling baseline mean spend, and <strong>σ (sigma)</strong> is the population standard deviation across historical observations.
           Higher Z-score values indicate stronger deviation from expected spending baselines ($Z \ge 4.0$ = Critical, $Z \ge 3.0$ = High, $Z \ge 2.0$ = Medium).
         </p>
       </div>
@@ -101,10 +101,10 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
         <div className="panel-header" style={{ flexWrap: 'wrap', gap: '12px' }}>
           <div className="panel-title">
             <h3>Calculated Cost Anomalies Log</h3>
-            <p>Outlier cost entries identified by statistical deviation engine</p>
+            <p>Outlier cost entries identified by statistical population standard deviation engine</p>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <input
               type="text"
               placeholder="Search service or date..."
@@ -164,12 +164,12 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
                   <tr key={idx}>
                     <td>{row.date}</td>
                     <td><strong>{row.service}</strong></td>
-                    <td style={{ color: 'var(--accent-rose)', fontWeight: 700 }}>
+                    <td style={{ color: 'var(--critical-color)', fontWeight: 700 }}>
                       ${row.amount.toFixed(2)}
                     </td>
                     <td>${(row.baseline || 50.0).toFixed(2)}</td>
                     <td>
-                      <strong style={{ color: row.zScore >= 4 ? 'var(--accent-rose)' : 'var(--accent-amber)' }}>
+                      <strong style={{ color: row.zScore >= 4 ? 'var(--critical-color)' : 'var(--warning-color)' }}>
                         {row.zScore ? row.zScore.toFixed(2) : '3.50'}
                       </strong>
                     </td>
@@ -179,7 +179,7 @@ export const AnomaliesView: React.FC<AnomaliesViewProps> = ({
                       </span>
                     </td>
                     <td>
-                      <span className="status-badge-pill" style={{ background: 'rgba(248,113,113,0.1)', borderColor: 'rgba(248,113,113,0.3)', color: 'var(--accent-rose)' }}>
+                      <span className="status-badge-pill" style={{ background: 'var(--critical-bg)', borderColor: 'var(--critical-border)', color: 'var(--critical-color)' }}>
                         ● Alert Logged
                       </span>
                     </td>

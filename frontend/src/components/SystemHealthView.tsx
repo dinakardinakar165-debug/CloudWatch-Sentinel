@@ -54,7 +54,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({ apiUrl }) =>
             <span className="metric-card-title">Backend API Health</span>
             <span className="metric-icon">🟢</span>
           </div>
-          <div className="metric-value" style={{ color: 'var(--accent-emerald)', fontSize: '20px' }}>
+          <div className="metric-value" style={{ color: 'var(--success-color)', fontSize: '20px' }}>
             ● {healthInfo.status.toUpperCase()}
           </div>
           <div className="metric-subtext">
@@ -78,11 +78,11 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({ apiUrl }) =>
             <span className="metric-card-title">Database Engine</span>
             <span className="metric-icon">💾</span>
           </div>
-          <div className="metric-value" style={{ fontSize: '18px', color: 'var(--accent-cyan)' }}>
+          <div className="metric-value" style={{ fontSize: '18px', color: 'var(--brand-blue)' }}>
             SQLite (WAL)
           </div>
           <div className="metric-subtext">
-            <span>5 Persistent Tables Initialized</span>
+            <span>Persistent Tables Initialized</span>
           </div>
         </div>
 
@@ -91,7 +91,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({ apiUrl }) =>
             <span className="metric-card-title">Host Cloud Target</span>
             <span className="metric-icon">☁️</span>
           </div>
-          <div className="metric-value" style={{ fontSize: '18px', color: 'var(--accent-purple)' }}>
+          <div className="metric-value" style={{ fontSize: '18px', color: 'var(--info-color)' }}>
             Render Platform
           </div>
           <div className="metric-subtext">
@@ -137,7 +137,7 @@ export const SystemHealthView: React.FC<SystemHealthViewProps> = ({ apiUrl }) =>
                       ● {comp.status}
                     </span>
                   </td>
-                  <td><code style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--accent-cyan)' }}>{comp.details}</code></td>
+                  <td><code style={{ fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--brand-blue)' }}>{comp.details}</code></td>
                 </tr>
               ))}
             </tbody>

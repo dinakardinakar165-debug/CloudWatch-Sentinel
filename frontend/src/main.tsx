@@ -11,7 +11,9 @@ import { CloudResourcesView } from './components/CloudResourcesView';
 import { AnomaliesView } from './components/AnomaliesView';
 import { AlertsView } from './components/AlertsView';
 import { SystemHealthView } from './components/SystemHealthView';
+import { CloudPlatformView } from './components/CloudPlatformView';
 import { SettingsView } from './components/SettingsView';
+
 import { AccountsView } from './components/AccountsView';
 import { AuthView } from './components/AuthView';
 
@@ -242,9 +244,14 @@ export function App() {
             />
           )}
 
+          {activeTab === 'Cloud Platform & Deployment' && (
+            <CloudPlatformView onNavigateTab={setActiveTab} />
+          )}
+
           {activeTab === 'System Health' && (
             <SystemHealthView apiUrl={apiUrl} />
           )}
+
 
           {activeTab === 'Settings' && (
             <SettingsView />

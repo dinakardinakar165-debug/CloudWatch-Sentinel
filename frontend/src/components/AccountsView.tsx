@@ -89,26 +89,26 @@ export const AccountsView: React.FC<AccountsViewProps> = ({
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13px' }}>
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>ACCOUNT NAME</span>
-              <strong style={{ fontSize: '16px', color: 'var(--accent-cyan)' }}>{account.accountName}</strong>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>ACCOUNT NAME</span>
+              <strong style={{ fontSize: '16px', color: 'var(--brand-blue)' }}>{account.accountName}</strong>
             </div>
 
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>ROLE ARN</span>
-              <code style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px', color: 'var(--text-secondary)' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>ROLE ARN</span>
+              <code style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px', color: 'var(--text-primary)' }}>
                 {account.roleArn}
               </code>
             </div>
 
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>EXTERNAL ID</span>
-              <code style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px', color: 'var(--accent-purple)' }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>EXTERNAL ID</span>
+              <code style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px', color: 'var(--brand-blue)' }}>
                 {account.externalId}
               </code>
             </div>
 
             <div>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block' }}>STATUS</span>
+              <span style={{ fontSize: '11px', color: 'var(--text-secondary)', display: 'block' }}>STATUS</span>
               <span className="status-badge-pill">
                 ● Active Monitoring
               </span>

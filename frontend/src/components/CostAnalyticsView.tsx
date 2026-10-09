@@ -7,11 +7,10 @@ interface CostAnalyticsViewProps {
 }
 
 export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) => {
-  const serviceColors = ['#38bdf8', '#818cf8', '#fbbf24', '#f87171', '#34d399', '#c084fc'];
+  const chartPalette = ['#3157C8', '#168C83', '#7764C8', '#D99A28', '#8491A5', '#2463A6'];
 
   const totalPeriodSpend = costs.reduce((acc, c) => acc + c.amount, 0);
 
-  // Group by service
   const serviceMap = costs.reduce((acc, c) => {
     acc[c.service] = (acc[c.service] || 0) + c.amount;
     return acc;
@@ -25,7 +24,6 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
 
   const highestCostService = serviceDistribution[0] || { name: 'Compute Services', value: 0, percentage: 0 };
 
-  // Group by date for daily total
   const dailyTotalsMap = costs.reduce((acc, c) => {
     acc[c.date] = (acc[c.date] || 0) + c.amount;
     return acc;
@@ -45,7 +43,7 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
             <span className="metric-card-title">Highest Cost Category</span>
             <span className="metric-icon">🔥</span>
           </div>
-          <div className="metric-value" style={{ fontSize: '20px' }}>{highestCostService.name}</div>
+          <div className="metric-value" style={{ fontSize: '18px', color: 'var(--brand-blue)' }}>{highestCostService.name}</div>
           <div className="metric-subtext">
             <span>${highestCostService.value.toFixed(2)} ({highestCostService.percentage}% of total)</span>
           </div>
@@ -80,7 +78,7 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
           </div>
           <div className="metric-value">${(totalPeriodSpend * 1.05).toFixed(2)}</div>
           <div className="metric-subtext">
-            <span style={{ color: 'var(--accent-emerald)' }}>Statistical linear trend projection</span>
+            <span style={{ color: 'var(--success-color)' }}>Statistical linear trend projection</span>
           </div>
         </div>
       </div>
@@ -96,16 +94,10 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
           <div style={{ width: '100%', height: 280 }}>
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={dailyTrendData}>
-                <defs>
-                  <linearGradient id="analyticsGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--accent-purple)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--accent-purple)" stopOpacity={0.0} />
-                  </linearGradient>
-                </defs>
-                <XAxis dataKey="date" stroke="var(--text-dim)" fontSize={11} />
-                <YAxis stroke="var(--text-dim)" fontSize={11} />
+                <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} />
+                <YAxis stroke="var(--text-muted)" fontSize={11} />
                 <Tooltip formatter={(v: number | string | Array<number | string> | undefined) => [`$${Number(v || 0).toFixed(2)}`, 'Daily Cost']} />
-                <Area type="monotone" dataKey="amount" stroke="var(--accent-purple)" strokeWidth={3} fill="url(#analyticsGradient)" />
+                <Area type="monotone" dataKey="amount" stroke="var(--brand-blue)" strokeWidth={2} fill="var(--brand-subtle)" fillOpacity={0.6} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -129,10 +121,10 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
                   cy="50%"
                   outerRadius={90}
                   innerRadius={50}
-                  paddingAngle={3}
+                  paddingAngle={2}
                 >
                   {serviceDistribution.map((_, idx) => (
-                    <Cell key={idx} fill={serviceColors[idx % serviceColors.length]} />
+                    <Cell key={idx} fill={chartPalette[idx % chartPalette.length]} />
                   ))}
                 </Pie>
                 <Tooltip formatter={(val: number | string | Array<number | string> | undefined) => [`$${Number(val || 0).toFixed(2)}`, 'Spend']} />
@@ -142,25 +134,24 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
         </div>
       </div>
 
-      <div className="panel-container" style={{ marginBottom: 24 }}>
+      <div className="panel-container" style={{ marginBottom: 20 }}>
         <div className="panel-header">
           <div className="panel-title">
-            <h3>Daily Cost Distribution Bar Chart</h3>
-            <p>Comparative daily spend histogram</p>
+            <h3>Daily Cost Distribution Histogram</h3>
+            <p>Comparative daily spend distribution</p>
           </div>
         </div>
-        <div style={{ width: '100%', height: 260 }}>
+        <div style={{ width: '100%', height: 250 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={dailyTrendData.slice(-14)}>
-              <XAxis dataKey="date" stroke="var(--text-dim)" fontSize={11} />
-              <YAxis stroke="var(--text-dim)" fontSize={11} />
+              <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} />
+              <YAxis stroke="var(--text-muted)" fontSize={11} />
               <Tooltip formatter={(v: number | string | Array<number | string> | undefined) => [`$${Number(v || 0).toFixed(2)}`, 'Daily Spend']} />
-              <Bar dataKey="amount" fill="var(--accent-cyan)" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="amount" fill="var(--brand-blue)" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
-
 
       <div className="panel-container">
         <div className="panel-header">
@@ -185,11 +176,11 @@ export const CostAnalyticsView: React.FC<CostAnalyticsViewProps> = ({ costs }) =
               {serviceDistribution.map((item, idx) => (
                 <tr key={idx}>
                   <td><strong>{item.name}</strong></td>
-                  <td style={{ fontWeight: 700, color: 'var(--accent-cyan)' }}>${item.value.toFixed(2)}</td>
+                  <td style={{ fontWeight: 700, color: 'var(--brand-blue)' }}>${item.value.toFixed(2)}</td>
                   <td>{item.percentage}%</td>
                   <td>${(item.value / (dailyTrendData.length || 1)).toFixed(2)}</td>
                   <td>
-                    <span className="status-badge-pill" style={{ background: 'rgba(56,189,248,0.1)', borderColor: 'rgba(56,189,248,0.3)', color: 'var(--accent-cyan)' }}>
+                    <span className="status-badge-pill" style={{ background: 'var(--brand-subtle)', borderColor: 'var(--brand-border)', color: 'var(--brand-blue)' }}>
                       ● Tracked Baseline
                     </span>
                   </td>
