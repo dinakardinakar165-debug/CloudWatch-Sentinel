@@ -124,6 +124,19 @@ def save_account(user_id: str, account_name: str, role_arn: str, external_id: st
     )
     conn.commit()
     conn.close()
+
+    try:
+        from backend.database.supabase_client import supabase
+        supabase.upsert("cloud_accounts", {
+            "user_id": user_id,
+            "account_name": account_name,
+            "role_arn": role_arn,
+            "external_id": external_id,
+            "updated_at": created_at
+        })
+    except Exception:
+        pass
+
     return {
         "userId": user_id,
         "accountName": account_name,
@@ -145,6 +158,21 @@ def save_cost(user_id: str, date: str, service: str, amount: float, currency: st
     )
     conn.commit()
     conn.close()
+
+    try:
+        from backend.database.supabase_client import supabase
+        supabase.upsert("cost_records", {
+            "id": row_id,
+            "user_id": user_id,
+            "date": date,
+            "service": service,
+            "amount": float(amount),
+            "currency": currency,
+            "collected_at": collected_at
+        })
+    except Exception:
+        pass
+
     return {"userId": user_id, "recordId": record_id, "date": date, "service": service, "amount": float(amount), "currency": currency, "collectedAt": collected_at}
 
 def list_costs(user_id: str, limit: int = 90) -> List[dict]:
@@ -170,6 +198,24 @@ def save_anomaly(user_id: str, anomaly: dict) -> dict:
     )
     conn.commit()
     conn.close()
+
+    try:
+        from backend.database.supabase_client import supabase
+        supabase.upsert("anomalies", {
+            "id": row_id,
+            "user_id": user_id,
+            "anomaly_id": anomaly_id,
+            "date": anomaly["date"],
+            "service": anomaly["service"],
+            "amount": float(anomaly["amount"]),
+            "baseline": float(anomaly["baseline"]),
+            "z_score": float(anomaly["zScore"]),
+            "severity": anomaly["severity"],
+            "created_at": created_at
+        })
+    except Exception:
+        pass
+
     return {**anomaly, "userId": user_id, "anomalyId": anomaly_id, "createdAt": created_at}
 
 def list_anomalies(user_id: str, limit: int = 50) -> List[dict]:
@@ -204,6 +250,21 @@ def save_notification(user_id: str, title: str, message: str, severity: str) -> 
     )
     conn.commit()
     conn.close()
+
+    try:
+        from backend.database.supabase_client import supabase
+        supabase.upsert("alerts", {
+            "id": row_id,
+            "user_id": user_id,
+            "notification_id": notification_id,
+            "title": title,
+            "message": message,
+            "severity": severity,
+            "created_at": created_at
+        })
+    except Exception:
+        pass
+
     return {"notificationId": notification_id, "userId": user_id, "title": title, "message": message, "severity": severity, "createdAt": created_at}
 
 def list_notifications(user_id: str, limit: int = 50) -> List[dict]:

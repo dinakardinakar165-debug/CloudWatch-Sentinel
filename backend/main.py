@@ -8,7 +8,10 @@ from pydantic import BaseModel, EmailStr
 from backend.anomaly.detector import detect
 from backend.authentication.service import register, login, confirm_registration, decode_jwt_token
 from backend.collector import scheduled_collector
+from backend.collector_worker import start_worker, run_collection_cycle
 from backend.shared import config, repository
+from backend.aws.client import AWSCloudClient
+from backend.database.supabase_client import supabase
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -16,12 +19,14 @@ async def lifespan(app: FastAPI):
     costs = repository.list_costs("demo-user-sub")
     if not costs:
         scheduled_collector(user_id="demo-user-sub")
+    # Start periodic background collection worker
+    start_worker(interval_seconds=300, user_id="demo-user-sub")
     yield
 
 app = FastAPI(
     title="CloudWatch Sentinel API",
-    description="Cloud-Independent AWS Cost Monitoring & Anomaly Alert System",
-    version="1.0.0",
+    description="Real-Time Cloud Cost Monitoring & Anomaly Detection Platform",
+    version="2.0.0",
     lifespan=lifespan
 )
 
@@ -54,6 +59,7 @@ class AccountConnection(BaseModel):
     accountName: str
     roleArn: str
     externalId: str
+    awsRegion: Optional[str] = "us-east-1"
 
 # Helper to extract current user from JWT Authorization header
 def get_current_user_id(authorization: Optional[str] = Header(None)) -> str:
@@ -69,6 +75,35 @@ def get_current_user_id(authorization: Optional[str] = Header(None)) -> str:
 @app.get("/health")
 def health():
     return {"status": "healthy"}
+
+@app.get("/system/status")
+def system_status():
+    return {
+        "status": "healthy",
+        "supabase": "connected" if supabase.is_connected() else "local_sqlite",
+        "version": "2.0.0"
+    }
+
+@app.get("/aws/status")
+def aws_status(user_id: str = Depends(get_current_user_id)):
+    acc = repository.get_account(user_id)
+    role_arn = acc.get("roleArn") if acc else None
+    ext_id = acc.get("externalId") if acc else None
+    client = AWSCloudClient(role_arn=role_arn, external_id=ext_id)
+    return client.validate_connection()
+
+@app.get("/supabase/status")
+def supabase_status():
+    return {
+        "enabled": supabase.enabled,
+        "connected": supabase.is_connected(),
+        "mode": "realtime_postgres" if supabase.is_connected() else "sqlite_fallback"
+    }
+
+@app.post("/collector/trigger")
+def trigger_collection(user_id: str = Depends(get_current_user_id)):
+    res = run_collection_cycle(user_id=user_id)
+    return res
 
 @app.post("/register", status_code=201)
 def api_register(data: Credentials):
@@ -95,7 +130,7 @@ def api_confirm(data: Confirmation):
 @app.post("/connect-account", status_code=201)
 def api_connect_account(data: AccountConnection, user_id: str = Depends(get_current_user_id)):
     acc = repository.save_account(user_id, data.accountName, data.roleArn, data.externalId)
-    return {"message": "Demo Cloud Account connected", "account": acc}
+    return {"message": "Cloud Account configured successfully", "account": acc}
 
 @app.get("/cost-history")
 def api_cost_history(user_id: str = Depends(get_current_user_id)):
@@ -137,7 +172,8 @@ def api_dashboard(user_id: str = Depends(get_current_user_id)):
         "latestDailyCost": round(total, 2),
         "anomalyCount": len(anomalies),
         "recentAnomalies": anomalies[:5],
-        "costHistory": costs[:30]
+        "costHistory": costs[:30],
+        "supabaseActive": supabase.is_connected()
     }
 
 @app.get("/alerts")

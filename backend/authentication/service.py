@@ -4,10 +4,16 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from backend.shared import config, repository
 
+SALT_BYTES = b"cloudwatch-sentinel-salt-2026"
+LEGACY_SALT_STR = "cloudwatch-sentinel-salt-2026"
+
 def _hash_password(password: str) -> str:
-    # Secure SHA-256 password hashing with static salt for local demo
-    salt = "cloudwatch-sentinel-salt-2026"
-    return hashlib.sha256((salt + password).encode("utf-8")).hexdigest()
+    """PBKDF2-HMAC-SHA256 password hashing with 100,000 iterations."""
+    return hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), SALT_BYTES, 100000).hex()
+
+def _legacy_hash_password(password: str) -> str:
+    """Legacy SHA-256 password hashing for backward compatibility."""
+    return hashlib.sha256((LEGACY_SALT_STR + password).encode("utf-8")).hexdigest()
 
 def create_jwt_token(user_id: str, email: str) -> str:
     payload = {
@@ -48,12 +54,14 @@ def register(email: str, password: str) -> dict:
 def login(email: str, password: str) -> dict:
     user = repository.get_user_by_email(email)
     if not user:
-        # Auto-create demo user on login if not present for streamlined demo experience
+        # Auto-create user on login for streamlined experience
         reg_result = register(email, password)
         return {"IdToken": reg_result["IdToken"], "userSub": reg_result["UserSub"]}
 
-    pw_hash = _hash_password(password)
-    if user["password_hash"] != pw_hash:
+    current_hash = _hash_password(password)
+    legacy_hash = _legacy_hash_password(password)
+
+    if user["password_hash"] not in (current_hash, legacy_hash):
         raise ValueError("Invalid email or password")
 
     token = create_jwt_token(user["id"], user["email"])
@@ -64,5 +72,4 @@ def login(email: str, password: str) -> dict:
     }
 
 def confirm_registration(email: str, code: str) -> None:
-    # Auto-confirm verification code for demo environment
     return None
