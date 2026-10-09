@@ -25,7 +25,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     {
       title: 'OVERVIEW',
       items: [
-        { id: 'Dashboard', label: 'Dashboard', icon: '📊' }
+        { id: 'Dashboard', label: 'Dashboard Overview', icon: '📊' },
+        { id: 'Reports & Exports', label: 'Reports & CSV Export', icon: '📄' }
       ]
     },
     {
@@ -33,7 +34,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { id: 'Cost Analytics', label: 'Cost Analytics', icon: '📈' },
         { id: 'Anomalies', label: 'Anomalies Engine', icon: '⚡' },
-        { id: 'Alerts & Notifications', label: 'Alerts & Notifications', icon: '🔔', badge: alertCount > 0 ? alertCount : undefined }
+        { id: 'Alerts & Notifications', label: 'Alerts & Notifications', icon: '🔔', badge: alertCount > 0 ? alertCount : undefined },
+        { id: 'Optimization Insights', label: 'Cost Optimization', icon: '💡' }
       ]
     },
     {

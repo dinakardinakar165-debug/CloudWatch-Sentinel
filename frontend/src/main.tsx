@@ -12,7 +12,10 @@ import { AnomaliesView } from './components/AnomaliesView';
 import { AlertsView } from './components/AlertsView';
 import { SystemHealthView } from './components/SystemHealthView';
 import { CloudPlatformView } from './components/CloudPlatformView';
+import { OptimizationView } from './components/OptimizationView';
+import { ReportsView } from './components/ReportsView';
 import { SettingsView } from './components/SettingsView';
+
 
 import { AccountsView } from './components/AccountsView';
 import { AuthView } from './components/AuthView';
@@ -244,9 +247,18 @@ export function App() {
             />
           )}
 
+          {activeTab === 'Reports & Exports' && (
+            <ReportsView costs={costs} anomalies={anomalies} />
+          )}
+
+          {activeTab === 'Optimization Insights' && (
+            <OptimizationView costs={costs} anomalies={anomalies} />
+          )}
+
           {activeTab === 'Cloud Platform & Deployment' && (
             <CloudPlatformView onNavigateTab={setActiveTab} />
           )}
+
 
           {activeTab === 'System Health' && (
             <SystemHealthView apiUrl={apiUrl} />
